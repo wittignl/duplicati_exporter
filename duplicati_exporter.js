@@ -1,6 +1,15 @@
 const express = require('express');
 const promClient = require('prom-client');
 const bodyParser = require('body-parser');
+const argv = require('yargs')
+    .usage('Usage: $0 [options]')
+    .example('$0 -p 9010', 'Use port 9010')
+    .alias('p', 'port')
+    .alias('h', 'help')
+    .default('p', 9118)
+    .describe('p', 'Server port')
+    .help('h')
+    .argv;
 
 // Initialize Express app
 const app = express();
@@ -119,7 +128,7 @@ app.get('/metrics', async (req, res) => {
 });
 
 // Start server
-const PORT = process.env.PORT || 9090;
+const PORT = process.env.PORT || argv.port;
 app.listen(PORT, () => {
     console.log(`Duplicati exporter listening on port ${PORT}`);
 });
